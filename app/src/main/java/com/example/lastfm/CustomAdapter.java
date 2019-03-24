@@ -1,31 +1,36 @@
 package com.example.lastfm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> implements View.OnClickListener {
 
     private List<CommonResult> dataList;
     private Context context;
+    private RecyclerView recyclerView;
 
-    public CustomAdapter(Context context, List<CommonResult> dataList) {
+    public CustomAdapter(Context context, List<CommonResult> dataList, RecyclerView recyclerView) {
         this.context = context;
         this.dataList = dataList;
+        this.recyclerView = recyclerView;
     }
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.custom_row, parent, false);
+        view.setOnClickListener(this);
         CustomViewHolder customViewHolder = new CustomViewHolder(view);
         return customViewHolder;
     }
@@ -47,6 +52,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     @Override
     public int getItemCount() {
         return dataList.size();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int itemPosition = recyclerView.getChildLayoutPosition(view);
+        String item = dataList.get(itemPosition).getName();
+        CommonResult result = dataList.get(itemPosition);
+        Toast.makeText(context, item, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("ITEM", result);
+        context.startActivity(intent);
     }
 
     static class CustomViewHolder extends RecyclerView.ViewHolder {

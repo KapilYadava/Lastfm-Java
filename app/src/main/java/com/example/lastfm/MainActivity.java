@@ -22,12 +22,14 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String keyword;
     private int type;
+    private RecyclerView listView;
 
     //String URL = "http://ws.audioscrobbler.com/2.0/?method=album.search&album=criminal&api_key=c3b522819f98239ec82a72a11d397899&format=json";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        listView = findViewById(R.id.listView);
 
         Intent intent = getIntent();
         keyword = intent.getStringExtra("KEYWORD");
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         else
             common = result.getResults().getTrackmatches().getTrack();
 
-        adapter = new CustomAdapter(this, common);
+        adapter = new CustomAdapter(this, common, listView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
